@@ -5,18 +5,19 @@ function onCreate(e)
     layer:setTouchEnabled(false)
     scene:addChild(layer)
 
-    local screen_rects = {}
-    for i = 1, Chip8.screenWidth do
-        for j = 1, Chip8.screenHeight do
-            local color = {1, 1, 1, 1}
-            local rect = Flower.Rect(CONFIG.scale, CONFIG.scale, color)
-            rect:setPos((i - 1) * CONFIG.scale, (j - 1) * CONFIG.scale)
-            rect:setLayer(layer)
-            rect:setVisible(false)
+    local chip8 = Chip8(layer)
+    chip8:loadRom('INVADERS')
 
-            table.insert(screen_rects, rect)
+    local MainLoop = MOAIThread.new()
+    MainLoop:run(function()
+        while(true) do
+            for counter = 1, math.floor(1000 / 60) do -- 1000 instructions per second
+                chip8:update()
+            end
+            coroutine:yield()
+            -- break
         end
-    end
+    end)
 end
 
 function onStart(e)

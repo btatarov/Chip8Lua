@@ -5,3 +5,5 @@
 *.swp
 *.out
 ._*
+
+test/
